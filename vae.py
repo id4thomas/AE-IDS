@@ -172,7 +172,7 @@ class TrainVAE:
                 val_losses[i].append(val_loss[i])
 
             print('Epoch loss recon:{:.5f}, kl:{:.5f}'.format(ep_loss[0],ep_loss[1]))
-            print('Epoch val loss recon:{:.5f}, c_loss{:.5f}'.format(val_loss[0],val_loss[1]))
+            print('Epoch val loss recon:{:.5f}, c_loss{:.5f}\n'.format(val_loss[0],val_loss[1]))
 
             self.net.save_model('./{}'.format(MODEL_NAME),ep+1,train_config)
 
@@ -186,6 +186,6 @@ class TrainVAE:
         kl_plot=plot_losses(train_losses[1],val_losses[1],'KL Divergence Loss')
         kl_plot.savefig('./vae/kl_loss.png')
 
-
-kvae=TrainVAE()
-kvae.train(1,256)
+if __name__ == "__main__":
+    kvae=TrainVAE()
+    kvae.train(1,256)

@@ -169,7 +169,7 @@ class TrainAAE:
             np.random.shuffle(x_train)
             batch_iters=int(x_train.shape[0]/batch_size)
             batch_loss=[0,0,0]
-            print("\nEpoch {}".format(ep+1))
+            print("Epoch {}".format(ep+1))
             for i in range(batch_iters):
                 #run batch
                 cur_idx=i*batch_size
@@ -194,7 +194,7 @@ class TrainAAE:
                 val_losses[i].append(val_loss[i])
 
             print('Epoch loss recon:{:.5f}, disc:{:.5f} g_loss:{:.5f}'.format(ep_loss[0],ep_loss[1],ep_loss[2]))
-            print('Val loss recon:{:.5f}, disc:{:.5f} g_loss:{:.5f}'.format(val_loss[0],val_loss[1],val_loss[2]))
+            print('Val loss recon:{:.5f}, disc:{:.5f} g_loss:{:.5f}\n'.format(val_loss[0],val_loss[1],val_loss[2]))
             self.net.save_model('./'+MODEL_NAME,ep+1,train_config)
 
         recon_plot=plot_losses(train_losses[0],val_losses[0],'Recon Loss')
@@ -206,6 +206,6 @@ class TrainAAE:
         g_plot=plot_losses(train_losses[2],val_losses[2],'Generator Loss')
         g_plot.savefig('./aae/g_loss.png')
 
-
-kvae=TrainAAE()
-kvae.train(15,256)
+if __name__ == "__main__":
+    kaae=TrainAAE()
+    kaae.train(15,256)
