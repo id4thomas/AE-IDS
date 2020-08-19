@@ -22,7 +22,7 @@ def plot2d(data,label,idx=[0,1],atk_front=False):
         a = plt2d.scatter(data[label==ATK,idx[0]], data[label==ATK,idx[1]], marker='o', color='b')
         #safe
         s = plt2d.scatter(data[label==SAFE,idx[0]], data[label==SAFE,idx[1]], marker='x', color='y')
-
+    plt2d.legend((s,a),('safe','attack'))
     return fig
 
 def plot3d(data,label,idx=[0,1,2],atk_front=False):
@@ -31,15 +31,15 @@ def plot3d(data,label,idx=[0,1,2],atk_front=False):
 
     if atk_front:
         #safe
-        plt3d.scatter(data[label==SAFE,idx[0]], data[label==SAFE,idx[1]],data[label==SAFE,idx[2]], marker='x', color='y')
+        s=plt3d.scatter(data[label==SAFE,idx[0]], data[label==SAFE,idx[1]],data[label==SAFE,idx[2]], marker='x', color='y')
         #atk
-        plt3d.scatter(data[label==ATK,idx[0]], data[label==ATK,idx[1]],data[label==ATK,idx[2]], marker='o', color='b')
+        a=plt3d.scatter(data[label==ATK,idx[0]], data[label==ATK,idx[1]],data[label==ATK,idx[2]], marker='o', color='b')
     else:
         #safe
-        plt3d.scatter(data[label==SAFE,idx[0]], data[label==SAFE,idx[1]],data[label==SAFE,idx[2]], marker='x', color='y')
+        s=plt3d.scatter(data[label==SAFE,idx[0]], data[label==SAFE,idx[1]],data[label==SAFE,idx[2]], marker='x', color='y')
         #atk
-        plt3d.scatter(data[label==ATK,idx[0]], data[label==ATK,idx[1]],data[label==ATK,idx[2]], marker='o', color='b')
-
+        a=plt3d.scatter(data[label==ATK,idx[0]], data[label==ATK,idx[1]],data[label==ATK,idx[2]], marker='o', color='b')
+    plt3d.legend((s,a),('safe','attack'))
     return fig
 
 def plot_losses(train_l,val_l,title):
