@@ -78,7 +78,7 @@ def make_roc(loss,label,ans_label=1,make_desc=False):
     print("Sum : ", len(allDataLoss))
     print(len(normalDataLoss))
     allLabel = [0]*len(normalDataLoss)+[1]*len(attackDataLoss)
-
+    allDataLoss=np.array(allDataLoss).flatten()
     fpr, tpr, thresholds = metrics.roc_curve(np.array(allLabel), np.array(allDataLoss), pos_label=1, drop_intermediate=False)
 
     fig=plt.figure()

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.decomposition import PCA, KernelPCA,SparsePCA,FastICA,TruncatedSVD
+from sklearn.random_projection import GaussianRandomProjection, SparseRandomProjection
 
 from perf_utils import *
 from data_utils import *
@@ -33,7 +34,7 @@ def plot_var(data,reduc_type,kernel='rbf',n_c=8):
     # fig.savefig('./plot/{}_cum_vr.png'.format(reduc_type))
     return vrfig,cvrfig
 
-def train_reduc(data,reduc_type='pca',kernel='rbf',n_c=8):
+def train_reduc(data,reduc_type='pca',kernel='rbf',n_c=8,eps=0.01,random_state=2020):
     if reduc_type=='pca':
         reduc=PCA(n_components=n_c)
     elif reduc_type=='spca':
@@ -43,9 +44,9 @@ def train_reduc(data,reduc_type='pca',kernel='rbf',n_c=8):
     elif reduc_type=='ica':
         reduc=FastICA(n_components=n_c)
     elif reduc_type=='grp':
-        pass
+        reduc=GaussianRandomProjection(n_components=n_c,eps=eps,random_state=random_state)
     elif reduc_type=='srp':
-        pass
+        reduc=SparseRandomProjection(n_components=n_c,density='auto',eps=eps,dense_output=True,random_state=random_state)
 
     reduced=reduc.fit_transform(data)
     print('Reduc Complete')
@@ -61,6 +62,10 @@ def test_reduc(data,label,reduc,reduc_type,dis='l1'):
     elif reduc_type=='spca':
         #spca
         data_recon=np.array(data_reduc).dot(reduc.components_)+np.array(data.mean(axis=0))
+    elif reduc_type=='grp':
+        reduc=GaussianRandomProjection(n_components=n_c,eps=eps,random_state=random_state)
+    elif reduc_type=='srp':
+        reduc=SparseRandomProjection(n_components=n_c,density='auto',eps=eps,dense_output=True,random_state=random_state)
     else:
         pass
 
@@ -70,5 +75,5 @@ def test_reduc(data,label,reduc,reduc_type,dis='l1'):
     elif dis=='l2':
         dist=np.mean(np.square(data - data_recon),axis=1)
 
-    roc,auc,desc=make_roc(dist,label,make_desc=True)
+    roc,auc,desc=make_roc(dist,label,ans_label=ATK,make_desc=True)
     return roc,auc,desc
