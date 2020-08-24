@@ -10,6 +10,8 @@ from data_utils import *
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import classification_report
 
+import argparse
+
 ATK=0
 SAFE=1
 
@@ -63,9 +65,9 @@ def test_reduc(data,label,reduc,reduc_type,dis='l1'):
         #spca
         data_recon=np.array(data_reduc).dot(reduc.components_)+np.array(data.mean(axis=0))
     elif reduc_type=='grp':
-        reduc=GaussianRandomProjection(n_components=n_c,eps=eps,random_state=random_state)
+        data_recon=np.array(data_reduc).dot(reduc.components_)
     elif reduc_type=='srp':
-        reduc=SparseRandomProjection(n_components=n_c,density='auto',eps=eps,dense_output=True,random_state=random_state)
+        data_recon=np.array(data_reduc).dot(reduc.components_.todense())
     else:
         pass
 
@@ -77,3 +79,24 @@ def test_reduc(data,label,reduc,reduc_type,dis='l1'):
 
     roc,auc,desc=make_roc(dist,label,ans_label=ATK,make_desc=True)
     return roc,auc,desc
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Reduction Algorithms')
+    parser.add_argument('--r_type', type=str, default='pca',
+                        help='Reduction Algorithm')
+    parser.add_argument('--dis', type=str, default='l1',
+                        help='Distance Type')
+    parser.add_argument('--n_c', type=int, default=8,
+                        help='Number of Components')
+
+    args = parser.parse_args()
+    n_c=args.n_c
+    reduc_type=args.r_type
+    dis=args.dis
+
+    #instance based
+    x_train=load_processed('train',only_data=True)
+    x_val,y_val=load_processed('val')
+
+    _,reduc=train_reduc(x_train,reduc_type=reduc_type,n_c=n_c)
+    roc_fig,auc,desc=test_reduc(x_val,y_val,reduc,reduc_type,dis=dis)
