@@ -54,10 +54,8 @@ def train_reduc(data,reduc_type='pca',kernel='rbf',n_c=8,eps=0.01,random_state=2
     print('Reduc Complete')
     return reduced,reduc
 
-def test_reduc(data,label,reduc,reduc_type,dis='l1'):
-    #Apply Reduc
+def inverse(data,reduc,reduc_type):
     data_reduc=reduc.transform(data)
-    #Recon
     if reduc_type in ['pca','kpca','ica']:
         #If inverse available
         data_recon=reduc.inverse_transform(data_reduc)
@@ -69,12 +67,20 @@ def test_reduc(data,label,reduc,reduc_type,dis='l1'):
     elif reduc_type=='srp':
         data_recon=np.array(data_reduc).dot(reduc.components_.todense())
     else:
+        data_recon=np.zeros_like(data)
         pass
+    return data_recon
+
+def test_reduc(data,label,reduc,reduc_type,dis='l1'):
+    #Recon
+    data_recon=inverse(data,reduc,reduc_type)
 
     #Calculate Recon Loss
     if dis=='l1':
+        #Manhattan
         dist=np.mean(np.abs(data-data_recon),axis=1)
     elif dis=='l2':
+        #MSE
         dist=np.mean(np.square(data - data_recon),axis=1)
 
     roc,auc,desc=make_roc(dist,label,ans_label=ATK,make_desc=True)
