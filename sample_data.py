@@ -10,7 +10,7 @@ ATK=0
 #Load Processed Data
 
 #Train Data
-train_d,train_l=load_proccessed('train')
+train_d,train_l=load_processed('train')
 
 #Sample 1:1 (Safe:Atk)
 safe_idx=[train_l==SAFE]
