@@ -44,8 +44,6 @@ args = parser.parse_args()
 reduc_type=args.r
 dis=args.dis
 
-#Set Params
-WINDOW_SIZE = args.win
 #Load Data
 #HDF5 Data
 # x_train,y_train=get_hdf5_data('../kyoto_data/hdf5/train')
