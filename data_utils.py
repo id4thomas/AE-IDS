@@ -7,18 +7,18 @@ import numpy as np
 #For kyoto data
 def load_data_config(type,config):
     #print(df.head)
-    data=np.load('../20_etri/data_configs/'+type+'_data_'+config+'.npy')
-    label=np.load('../20_etri/data_configs/'+type+'_label_'+config+'.npy')
+    data=np.load('./data/data_configs/'+type+'_data_'+config+'.npy')
+    label=np.load('./data/data_configs/'+type+'_label_'+config+'.npy')
     #print(df.head)
     return data,label
 
 def load_processed(type):
-    train_file='../20_etri/processed/'+type+'.csv'
+    train_file='./data/processed/'+type+'.csv'
     df=pd.read_csv(train_file,sep="\t", header = None)
     #print(df.head)
     data=df.iloc[:,range(0,119)].to_numpy()
     #idx3: atk label
-    label=np.load('../20_etri/processed/'+type+'_label.npy')[:,3]
+    label=np.load('./data/processed/'+type+'_label.npy')[:,3]
     #print(df.head)
     return data,label
 
